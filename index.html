@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>量子计算研究论文合集</title>
+    <style>
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* 基础样式 - 与原有学术样式保持一致 */
+        :root {
+            /* 亮色模式变量 */
+            --bg-color: #f8f9fa;
+            --paper-bg: #ffffff;
+            --text-color: #333;
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --border-color: #e0e0e0;
+            --header-border: #3498db;
+            --abstract-bg: #e8f4ff;
+            --table-header-bg: #e8f4ff;
+            --footer-color: #7f8c8d;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --caption-bg: #e8f4ff;
+            --button-bg: #3498db;
+            --button-text: #ffffff;
+            --button-hover: #2980b9;
+            --active-link: #1a5276;
+        }
+
+        body.dark-mode {
+            /* 暗色模式变量 */
+            --bg-color: #121212;
+            --paper-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --primary-color: #64b5f6;
+            --secondary-color: #90caf9;
+            --border-color: #424242;
+            --header-border: #64b5f6;
+            --abstract-bg: #0d47a1;
+            --table-header-bg: #0d47a1;
+            --footer-color: #b0bec5;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --caption-bg: #0d47a1;
+            --button-bg: #0d47a1;
+            --button-text: #ffffff;
+            --button-hover: #1565c0;
+            --active-link: #4fc3f7;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 100px;
+        }
+
+        body {
+            font-family: 'Latin Modern Roman', 'Source Han Serif SC', serif;
+            font-size: 18px;
+            line-height: 1.8;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 24px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+
+        /* 论文合集头部 */
+        .collection-header {
+            text-align: center;
+            padding: 40px 0;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--header-border);
+        }
+
+        .collection-title {
+            font-size: 2.8rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+
+        .collection-subtitle {
+            font-size: 1.4rem;
+            color: var(--secondary-color);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* 导航侧边栏 */
+        .sidebar {
+            position: sticky;
+            top: 30px;
+            height: fit-content;
+            background: var(--paper-bg);
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        .sidebar-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .paper-nav {
+            list-style: none;
+            padding: 0;
+        }
+
+        .paper-nav-item {
+            margin-bottom: 15px;
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .paper-nav-link {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: block;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .paper-nav-link:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+            transform: translateX(5px);
+        }
+
+        .paper-nav-link.active {
+            color: var(--active-link);
+            font-weight: bold;
+            background-color: rgba(26, 82, 118, 0.15);
+            border-left: 3px solid var(--active-link);
+        }
+
+        /* 论文卡片样式 */
+        .paper-card {
+            background: var(--paper-bg);
+            border-radius: 8px;
+            padding: 35px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+            scroll-margin-top: 100px;
+        }
+
+        .paper-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px var(--shadow-color);
+        }
+
+        .paper-header {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .paper-title {
+            font-size: 2.0rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .paper-meta {
+            color: var(--footer-color);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .abstract-section {
+            background: var(--abstract-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .abstract-title {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .paper-content {
+            margin-top: 25px;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 25px 0;
+        }
+
+        .keyword {
+            background: rgba(52, 152, 219, 0.15);
+            color: var(--secondary-color);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .btn-read-paper {
+            display: inline-block;
+            background: var(--button-bg);
+            color: var(--button-text);
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+
+        .btn-read-paper:hover {
+            background: var(--button-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--button-hover);
+            transform: scale(1.1);
+        }
+
+        /* 返回顶部按钮 */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--button-bg);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            background: var(--button-hover);
+            transform: translateY(-3px);
+        }
+
+        /* 页脚 */
+        .collection-footer {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 30px;
+            border-top: 1px solid var(--border-color);
+            color: var(--footer-color);
+            font-size: 1.1rem;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+                margin-bottom: 30px;
+            }
+
+            .collection-title {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="back-to-top">↑</div>
+
+    <div class="collection-header">
+        <h1 class="collection-title">量子计算前沿研究论文合集</h1>
+        <p class="collection-subtitle">精选2023年量子计算领域最具影响力的研究成果</p>
+    </div>
+
+    <div class="container">
+        <!-- 导航侧边栏 -->
+        <aside class="sidebar">
+            <h2 class="sidebar-title">论文导航</h2>
+            <ul class="paper-nav">
+                <li class="paper-nav-item"><a href="#paper1" class="paper-nav-link active">分子量子模拟研究</a></li>
+                <li class="paper-nav-item"><a href="#paper2" class="paper-nav-link">量子机器学习算法</a></li>
+                <li class="paper-nav-item"><a href="#paper3" class="paper-nav-link">量子纠错新方法</a></li>
+                <li class="paper-nav-item"><a href="#paper4" class="paper-nav-link">量子神经网络优化</a></li>
+                <li class="paper-nav-item"><a href="#paper5" class="paper-nav-link">量子通信协议</a></li>
+            </ul>
+
+
+        </aside>
+
+        <!-- 论文卡片区域 -->
+        <main>
+            <!-- 论文1 -->
+            <article id="paper1" class="paper-card">
+                <div class="paper-header">
+                    <h2 class="paper-title">量子计算在分子模拟中的应用研究</h2>
+                    <div class="paper-meta">
+                        <span>作者：张教授 · 量子计算实验室</span> |
+                        <span>发表日期：2023年10月15日</span> |
+                        <span>期刊：Nature Quantum Computing</span>
+                    </div>
+                    <div class="keywords">
+                        <span class="keyword">量子化学</span>
+                        <span class="keyword">VQE算法</span>
+                        <span class="keyword">分子模拟</span>
+                        <span class="keyword">量子门</span>
+                    </div>
+                </div>
+
+                <div class="abstract-section">
+                    <h3 class="abstract-title">摘要</h3>
+                    <p>本文研究了量子计算在水分子模拟中的应用，通过构建6量子比特系统，使用CNOT、RY和RX门操作，结合COBYLA优化算法，实现了高效的量子化学模拟。研究表明，量子算法在计算效率和精度上均优于传统计算方法，在100次迭代内收敛，精度达到化学精度(1.6
+                        mHa)。</p>
+                </div>
+
+                <div class="paper-content">
+                    <h3 class="section-title">核心发现</h3>
+                    <p>本研究成功实现了水分子(H₂O)的量子模拟，验证了量子计算在化学模拟中的优势。通过优化量子电路设计，我们将门操作数量减少了30%，同时保持了计算精度。</p>
+
+                    <h3 class="section-title">研究方法</h3>
+                    <p>采用变分量子本征求解器(VQE)算法，构建了包含6个量子比特的系统，每个量子比特代表分子轨道中的一个电子态。系统使用CNOT、RY和RX门操作，结合COBYLA优化算法。</p>
+
+                    <a href="笛子声学：从振动原理到乐器实践.html" class="btn-read-paper">阅读完整论文</a>
+                </div>
+            </article>
+
+            <!-- 论文2 -->
+            <article id="paper2" class="paper-card">
+                <div class="paper-header">
+                    <h2 class="paper-title">量子机器学习算法的优化与实现</h2>
+                    <div class="paper-meta">
+                        <span>作者：李研究员 · 人工智能实验室</span> |
+                        <span>发表日期：2023年9月28日</span> |
+                        <span>期刊：Quantum Machine Intelligence</span>
+                    </div>
+                    <div class="keywords">
+                        <span class="keyword">量子机器学习</span>
+                        <span class="keyword">QSVM</span>
+                        <span class="keyword">量子核方法</span>
+                        <span class="keyword">优化算法</span>
+                    </div>
+                </div>
+
+                <div class="abstract-section">
+                    <h3 class="abstract-title">摘要</h3>
+                    <p>本文提出了一种新型量子支持向量机(QSVM)算法，通过优化量子核函数设计，在图像分类任务中实现了95.2%的准确率。研究在IBM
+                        Quantum平台上验证了算法的有效性，相比经典SVM速度提升3.7倍。该算法特别适用于高维数据处理，为量子机器学习提供了新思路。</p>
+                </div>
+
+                <div class="paper-content">
+                    <h3 class="section-title">创新点</h3>
+                    <p>本研究的主要创新在于设计了高效的量子特征映射电路，减少了量子资源消耗，同时保持了模型的表达能力。实验证明，在相同的量子比特数下，我们的方法比现有方案精度提高12%。</p>
+
+                    <h3 class="section-title">实验结果</h3>
+                    <p>在MNIST数据集上的实验表明，我们的QSVM算法在仅使用8个量子比特的情况下，达到了与经典深度神经网络相当的准确率，同时训练时间减少了68%。</p>
+
+                    <a href="paper2.html" class="btn-read-paper">阅读完整论文</a>
+                </div>
+            </article>
+
+            <!-- 论文3 -->
+            <article id="paper3" class="paper-card">
+                <div class="paper-header">
+                    <h2 class="paper-title">基于表面码的量子纠错新方法研究</h2>
+                    <div class="paper-meta">
+                        <span>作者：王博士 · 量子工程中心</span> |
+                        <span>发表日期：2023年11月5日</span> |
+                        <span>期刊：Physical Review X Quantum</span>
+                    </div>
+                    <div class="keywords">
+                        <span class="keyword">量子纠错</span>
+                        <span class="keyword">表面码</span>
+                        <span class="keyword">容错计算</span>
+                        <span class="keyword">量子比特</span>
+                    </div>
+                </div>
+
+                <div class="abstract-section">
+                    <h3 class="abstract-title">摘要</h3>
+                    <p>本研究开发了一种改进的表面码量子纠错方案，通过优化测量电路设计，将逻辑错误率降低了45%。在超导量子处理器上的实验表明，新方法可将量子比特的相干时间延长至现有水平的3倍以上。这项工作为实现大规模容错量子计算提供了关键技术支撑。
+                    </p>
+                </div>
+
+                <div class="paper-content">
+                    <h3 class="section-title">技术突破</h3>
+                    <p>我们提出了一种分层纠错架构，结合了局部和全局纠错策略，在保持纠错能力的同时将物理量子比特需求减少了25%。</p>
+
+                    <h3 class="section-title">实验验证</h3>
+                    <p>在IBM的27量子比特处理器上进行的实验表明，我们的纠错方案可以将单量子比特门的错误率从1.2×10⁻³降低到2.7×10⁻⁴，双量子比特门的错误率从3.8×10⁻³降低到8.9×10⁻⁴。
+                    </p>
+
+                    <a href="paper3.html" class="btn-read-paper">阅读完整论文</a>
+                </div>
+            </article>
+
+            <!-- 论文4 -->
+            <article id="paper4" class="paper-card">
+                <div class="paper-header">
+                    <h2 class="paper-title">量子神经网络的高效训练算法研究</h2>
+                    <div class="paper-meta">
+                        <span>作者：陈教授 · 计算智能研究所</span> |
+                        <span>发表日期：2023年8月17日</span> |
+                        <span>期刊：Quantum Science and Technology</span>
+                    </div>
+                    <div class="keywords">
+                        <span class="keyword">量子神经网络</span>
+                        <span class="keyword">参数优化</span>
+                        <span class="keyword">梯度消失</span>
+                        <span class="keyword">量子优化</span>
+                    </div>
+                </div>
+
+                <div class="abstract-section">
+                    <h3 class="abstract-title">摘要</h3>
+                    <p>本文针对量子神经网络(QNN)训练中的梯度消失问题，提出了一种自适应学习率优化算法。该算法通过动态调整参数更新策略，有效缓解了训练停滞现象。在分子能量预测和图像分类任务中，新方法使QNN的收敛速度提高了2.3倍，测试准确率提升了8.7%。
+                    </p>
+                </div>
+
+                <div class="paper-content">
+                    <h3 class="section-title">算法创新</h3>
+                    <p>我们的自适应量子优化器(AQO)结合了经典Adam优化器的思想和量子自然梯度方法，在保持量子优势的同时显著提高了训练效率。</p>
+
+                    <h3 class="section-title">应用前景</h3>
+                    <p>该方法可广泛应用于量子化学模拟、量子金融模型和量子药物设计等领域，为实用量子机器学习铺平道路。</p>
+
+                    <a href="paper4.html" class="btn-read-paper">阅读完整论文</a>
+                </div>
+            </article>
+
+            <!-- 论文5 -->
+            <article id="paper5" class="paper-card">
+                <div class="paper-header">
+                    <h2 class="paper-title">基于量子纠缠的安全通信协议设计</h2>
+                    <div class="paper-meta">
+                        <span>作者：赵博士 · 量子通信实验室</span> |
+                        <span>发表日期：2023年12月3日</span> |
+                        <span>期刊：Quantum Information Processing</span>
+                    </div>
+                    <div class="keywords">
+                        <span class="keyword">量子通信</span>
+                        <span class="keyword">量子密钥分发</span>
+                        <span class="keyword">量子纠缠</span>
+                        <span class="keyword">网络安全</span>
+                    </div>
+                </div>
+
+                <div class="abstract-section">
+                    <h3 class="abstract-title">摘要</h3>
+                    <p>本研究提出了一种新型量子密钥分发(QKD)协议，利用高维量子纠缠态实现信息的安全传输。实验证明，该协议在50公里光纤距离上实现了1.2Mbps的密钥率，比现有方案提高3倍，同时抵御了所有已知的量子黑客攻击。该协议为构建下一代量子安全通信网络奠定了基础。
+                    </p>
+                </div>
+
+                <div class="paper-content">
+                    <h3 class="section-title">协议特点</h3>
+                    <p>我们的协议使用四维量子态(qudits)而非传统的二维量子态(qubits)，显著提高了信道容量和安全性。</p>
+
+                    <h3 class="section-title">实验结果</h3>
+                    <p>在城市光纤网络中的实地测试表明，该协议在30公里距离上保持了98.7%的传输成功率，误码率低于0.8%，完全满足商业安全通信标准。</p>
+
+                    <a href="paper5.html" class="btn-read-paper">阅读完整论文</a>
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <footer class="collection-footer">
+        <p><a href="https://zxhfh.github.io">zxhfh.github.io</a></p>
+        <p>昉晧 | GitHub Pages</p>
+    </footer>
+
+    <button class="theme-toggle" id="themeToggle">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+
+    <script>
+        // 平滑滚动到论文
+        document.querySelectorAll('.paper-nav-link').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    // 更新导航激活状态
+                    document.querySelectorAll('.paper-nav-link').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
+
+                    // 平滑滚动
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // 主题切换功能
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+
+            // 更新按钮图标
+            const svgPath = themeToggle.querySelector('path');
+            if (document.body.classList.contains('dark-mode')) {
+                svgPath.setAttribute('d', 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z');
+            } else {
+                svgPath.setAttribute('d', 'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z');
+            }
+        });
+
+        // 返回顶部功能
+        window.addEventListener('scroll', () => {
+            const backToTop = document.querySelector('.back-to-top');
+            if (window.scrollY > 500) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+
+        document.querySelector('.back-to-top').addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // 滚动时更新导航激活状态
+        window.addEventListener('scroll', () => {
+            const papers = document.querySelectorAll('.paper-card');
+            let currentActive = null;
+
+            papers.forEach(paper => {
+                const paperTop = paper.offsetTop;
+                if (window.scrollY >= paperTop - 150) {
+                    currentActive = paper;
+                }
+            });
+
+            if (currentActive) {
+                const activeId = currentActive.id;
+                document.querySelectorAll('.paper-nav-link').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${activeId}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
