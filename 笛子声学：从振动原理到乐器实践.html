@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <title>学术论文</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* 学术论文样式 - 支持暗色/亮色模式 */
+:root {
+  /* 亮色模式变量 */
+  --bg-color: #f8f9fa;
+  --paper-bg: #ffffff;
+  --text-color: #333;
+  --primary-color: #2c3e50;
+  --secondary-color: #3498db;
+  --border-color: #e0e0e0;
+  --header-border: #3498db;
+  --abstract-bg: #e8f4ff;
+  --table-header-bg: #e8f4ff;
+  --footer-color: #7f8c8d;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --caption-bg: #e8f4ff;
+  --button-bg: #3498db;
+  --button-text: #ffffff;
+  --button-hover: #2980b9;
+  --active-link: #1a5276; /* 新增激活链接颜色 */
+}
+
+body.dark-mode {
+  /* 暗色模式变量 */
+  --bg-color: #121212;
+  --paper-bg: #1e1e1e;
+  --text-color: #e0e0e0;
+  --primary-color: #64b5f6;
+  --secondary-color: #90caf9;
+  --border-color: #424242;
+  --header-border: #64b5f6;
+  --abstract-bg: #0d47a1;
+  --table-header-bg: #0d47a1;
+  --footer-color: #b0bec5;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --caption-bg: #0d47a1;
+  --button-bg: #0d47a1;
+  --button-text: #ffffff;
+  --button-hover: #1565c0;
+  --active-link: #4fc3f7; /* 暗模式激活链接颜色 */
+}
+
+/* 添加平滑滚动基础 */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px; /* 为固定导航栏留出空间 */
+}
+
+body {
+  font-family: 'Latin Modern Roman', 'Source Han Serif SC', serif;
+  font-size: 18px;
+  line-height: 1.8;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  padding: 24px;
+  counter-reset: section subsection figure table equation bibliography;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.paper-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: var(--paper-bg);
+  padding: 48px;
+  box-shadow: 0 0 20px var(--shadow-color);
+  border-radius: 8px;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.paper-header {
+  text-align: center;
+  padding: 20px 0 30px;
+  border-bottom: 2px solid var(--header-border);
+  margin-bottom: 20px;
+}
+
+.paper-title {
+  font-size: 2.4rem;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+  font-weight: bold;
+  line-height: 1.3;
+}
+
+.abstract-section {
+  background: var(--abstract-bg);
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  transition: background-color 0.3s;
+}
+
+.chapter-title {
+  font-size: 2.0rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  margin-top: 36px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+  counter-increment: section;
+  counter-reset: subsection;
+  transition: color 0.3s, border-color 0.3s;
+}
+
+.section-title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  margin-top: 30px;
+  margin-bottom: 15px;
+  counter-increment: subsection;
+  transition: color 0.3s;
+}
+
+.subsubsection-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  margin-top: 24px;
+  margin-bottom: 10px;
+  transition: color 0.3s;
+}
+
+p {
+  text-indent: 2em;
+  margin: 20px 0;
+  text-align: justify;
+}
+
+#table-of-contents {
+  background: var(--paper-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 24px;
+  margin: 24px 0 40px;
+  box-shadow: 0 2px 5px var(--shadow-color);
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+/* 添加在 #table-of-contents 规则之后 */
+
+/* 目录链接样式 */
+#table-of-contents a {
+  color: var(--secondary-color); /* 使用主题中的次要颜色 */
+  text-decoration: none; /* 移除默认下划线 */
+  /* transition: color 0.3s; 添加颜色过渡效果 */
+  transition: all 0.3s ease;
+  display: block;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+#table-of-contents a:hover {
+  color: var(--primary-color); /* 鼠标悬停时使用主色 */
+  background-color: rgba(52, 152, 219, 0.1);
+  transform: translateX(5px);
+  text-decoration: underline; /* 悬停时显示下划线 */
+  text-decoration-color: rgba(52, 152, 219, 0.3); /* 下划线颜色 */
+}
+
+#table-of-contents a.active {
+  color: var(--active-link);
+  font-weight: bold;
+  background-color: rgba(26, 82, 118, 0.15);
+  border-left: 3px solid var(--active-link);
+}
+
+/* 高亮当前阅读部分 */
+.highlight-section {
+  background: rgba(52, 152, 219, 0.1);
+  box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2);
+  transition: all 0.5s ease;
+}
+
+/* 进度指示器 */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 5px;
+  background: var(--secondary-color);
+  z-index: 1000;
+  width: 0%;
+  transition: width 0.2s ease;
+}
+
+/* 返回顶部按钮 */
+.back-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: var(--button-bg);
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.back-to-top.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.back-to-top:hover {
+  background: var(--button-hover);
+  transform: translateY(-3px);
+}
+
+/* 为章节标题添加滚动边距 */
+.chapter-title, .section-title, .subsubsection-title {
+  scroll-margin-top: 100px;
+}
+
+/* 如果需要，可以为不同级别的目录链接设置不同样式 */
+.toc-chapter a {
+  font-weight: bold; /* 章级链接加粗 */
+}
+
+.toc-section a {
+  /* 节级链接样式 */
+}
+
+.toc-subsection a {
+  /* 小节级链接样式 */
+}
+
+.toc-title {
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--primary-color);
+}
+
+#toc-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.toc-chapter {
+  margin: 15px 0;
+  font-weight: bold;
+}
+
+.toc-section {
+  margin: 8px 0 8px 20px;
+  font-size: 0.95em;
+}
+
+.toc-subsection {
+  margin: 5px 0 5px 40px;
+  font-size: 0.9em;
+}
+
+.figure-container {
+  margin: 24px 0;
+  text-align: center;
+  counter-increment: figure;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--paper-bg);
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.figure-container img {
+  max-width: 50%;/* 图片宽度 */
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  box-shadow: 0 2px 4px var(--shadow-color);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.figure-caption {
+  font-style: normal;
+  margin-top: 10px;
+  text-align: center;
+  font-weight: bold;
+  color: var(--secondary-color);
+  transition: color 0.3s;
+}
+
+/* 修复公式块样式 - 更符合学术规范 */
+/* 修改公式容器布局 */
+.equation-container {
+  display: flex;
+  align-items: center; /* 垂直居中 */
+  justify-content: center; /* 水平居中 */
+  margin: 24px 0;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--paper-bg);
+  transition: background-color 0.3s, border-color 0.3s;
+  counter-increment: equation;
+  position: relative;
+  min-height: 60px;
+}
+
+.equation-content {
+  flex: 1;
+  text-align: center;
+  overflow-x: auto; /* 允许长公式水平滚动 */
+  padding: 0;
+}
+
+.mathjax-equation {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+
+/* 调整公式编号位置 */
+.equation-label {
+  position: static; /* 从绝对定位改为静态定位 */
+  margin-left: 20px; /* 在公式右侧添加间距 */
+  font-style: normal;
+  color: var(--secondary-color);
+  font-weight: bold;
+  transition: color 0.3s;
+  flex-shrink: 0; /* 防止编号被压缩 */
+}
+
+/* .academic-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  counter-increment: table;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px var(--shadow-color);
+  transition: border-color 0.3s, box-shadow 0.3s;
+} */
+
+/* 表格整体样式 */
+.academic-table {
+  font-size: 0.9em; /* 减小字体大小为正文的90% */
+  line-height: 1.4; /* 减小行高 */
+  width: 100%; /* 表格宽度100% */
+  border-collapse: collapse; /* 合并单元格边框 */
+  margin: 16px 0; /* 表格外边距 */
+  counter-increment: table;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px var(--shadow-color);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* 表头和单元格样式 */
+.academic-table th,
+.academic-table td {
+  padding: 8px 12px; /* 减小内边距：上下8px，左右12px */
+  border: 1px solid var(--border-color); /* 使用主题边框色 */
+  text-align: left; /* 左对齐文本 */
+}
+
+/* 表头特定样式 */
+.academic-table th {
+  background-color: var(--table-header-bg); /* 表头背景色 */
+  font-weight: bold; /* 加粗字体 */
+  color: var(--primary-color); /* 主文字颜色 */
+}
+
+/* 表格正文样式 */
+.academic-table td {
+  background-color: var(--paper-bg); /* 单元格背景色 */
+}
+
+/* 段落样式（表格内的<p>标签） */
+.academic-table td p {
+  margin: 4px 0; /* 减小段落间距 */
+}
+
+caption {
+  font-style: normal;
+  padding: 12px;
+  caption-side: bottom;
+  text-align: center;
+  background: var(--caption-bg);
+  color: var(--primary-color);
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.ref {
+  vertical-align: super;
+  font-size: 0.8em;
+  color: var(--secondary-color);
+  cursor: pointer;
+  padding: 0 2px;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.figure-ref, .table-ref, .equation-ref {
+  font-weight: bold;
+  color: var(--secondary-color);
+  cursor: pointer;
+  padding: 0 2px;
+  transition: color 0.3s;
+}
+
+#bibliography {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 2px solid var(--header-border);
+  transition: border-color 0.3s;
+}
+
+.bibliography-title {
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+  transition: color 0.3s;
+}
+
+.bibliography-item {
+  margin: 15px 0;
+  padding-left: 30px;
+  text-indent: -30px;
+}
+
+.footer {
+  text-align: center;
+  padding-top: 15px;
+  margin-top: 48px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9em;
+  color: var(--footer-color);
+  transition: color 0.3s, border-color 0.3s;
+}
+
+/* 主题切换按钮 */
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px var(--shadow-color);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  background-color: var(--button-hover);
+  transform: scale(1.1);
+}
+
+.theme-toggle svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+/* 添加引用样式 */
+.figure-ref, .table-ref, .equation-ref {
+    font-weight: bold;
+    color: var(--secondary-color);
+    cursor: pointer;
+    padding: 0 2px;
+    transition: color 0.3s;
+    text-decoration: underline;
+    text-decoration-color: rgba(52, 152, 219, 0.3);
+    text-underline-offset: 3px;
+}
+
+.figure-ref:hover, .table-ref:hover, .equation-ref:hover {
+    color: var(--primary-color);
+    text-decoration-color: var(--secondary-color);
+}
+
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+        <svg id="themeIcon" viewBox="0 0 24 24">
+            <path id="themeIconPath" d="M12,22 C17.5228475,22 22,17.5228475 22,12 C22,6.4771525 17.5228475,2 12,2 C6.4771525,2 2,6.4771525 2,12 C2,17.5228475 6.4771525,22 12,22 Z M12,20.5 L12,3.5 C16.6944204,3.5 20.5,7.30557963 20.5,12 C20.5,16.6944204 16.6944204,20.5 12,20.5 Z"></path>
+        </svg>
+    </button>
+    
+    <div class="paper-container">
+        
+        <div class="paper-header">
+            <h1 class="paper-title">笛子声学：从振动原理到乐器实践</h1>
+            <div class="author-info">昉晧，2025年7月</div>
+        </div>
+      
+        <div id="table-of-contents">
+            <div class="toc-title">目录</div>
+            <ul id="toc-list">
+                <li class="toc-chapter"><a href="#section-1">1. 人如何感受到声音</a></li>
+<li class="toc-section"><a href="#subsection-1-1">1.1 声音模型</a></li>
+<li class="toc-section"><a href="#subsection-1-2">1.2 频率</a></li>
+<li class="toc-section"><a href="#subsection-1-3">1.3 发声物体/乐器的分类</a></li>
+<li class="toc-section"><a href="#subsection-1-4">1.4 弦和空气柱的振动模型和频率模型</a></li>
+<li class="toc-subsection"><a href="#subsubsection-1-4-1">1.4.1 弦的振动方程</a></li>
+<li class="toc-subsection"><a href="#subsubsection-1-4-2">1.4.2 空气柱的振动方程</a></li>
+<li class="toc-subsection"><a href="#subsubsection-1-4-3">1.4.3 弦的频率方程</a></li>
+<li class="toc-subsection"><a href="#subsubsection-1-4-4">1.4.4 空气柱的频率方程</a></li>
+<li class="toc-section"><a href="#subsection-1-5">1.5 感知声音</a></li>
+<li class="toc-chapter"><a href="#section-2">2. 呼吸</a></li>
+<li class="toc-chapter"><a href="#section-3">3. 基础乐理</a></li>
+<li class="toc-chapter"><a href="#section-4">4. 笛子历史</a></li>
+<li class="toc-chapter"><a href="#section-5">5. 笛子发声原理详解</a></li>
+
+            </ul>
+        </div>
+      
+        <p>本文探讨了...
+</p>
+      
+        <h2 class="chapter-title" id="section-1">1. 人如何感受到声音</h2>
+
+<h3 class="section-title" id="subsection-1-1">1.1 声音模型</h3>
+
+<p>物体通过周期性的振动使介质（空气）振动形成声波，<span class="math inline">\(1\text{ s}\)</span> 内振动的次数为频率值。单频声波可简化为正弦行波，方程如下：</p>
+
+
+        <div class="equation-container" id="eq-1">
+            <div class="equation-content">
+                <div class="mathjax-equation">$$y(x,t) = A \cdot \sin(kx - \omega t + \phi_0)$$</div>
+            </div>
+            <div class="equation-label">(1)</div>
+        </div>
+        
+
+<p><span class="math inline">\( y(x,t) \)</span> 表示位移（扰动）或声压。在介质同一点，<span class="math inline">\(y\)</span> 是 <span class="math inline">\(t\)</span> 的函数；在同一时间，<span class="math inline">\(y\)</span> 是 <span class="math inline">\(x\)</span> 的函数。<br>
+&emsp;&emsp; <span class="math inline">\(A\)</span> 为振幅，决定声音响度；<br>
+&emsp;&emsp; <span class="math inline">\(k\)</span> 为（角）波数，<span class="math inline">\(λ\)</span> 为波长，<span class="math inline">\(f\)</span> 为频率，<span class="math inline">\(v\)</span> 为波速， <span class="math inline">\(k = 2π / λ\)</span>，<span class="math inline">\(λ=v/f\)</span>，<span class="math inline">\(k\)</span> 反映了在 <span class="math inline">\(2π\)</span> 弧度的相位变化内，波在空间上重复了多少次；<br>
+&emsp;&emsp;<span class="math inline">\(ω\)</span>为角频率，<span class="math inline">\(ω = 2πf\)</span>，它反映了在 <span class="math inline">\(2π\)</span> 弧度的相位变化内，波在时间上重复了多少次；<br>
+&emsp;&emsp;<span class="math inline">\(x\)</span>为空间位置，表示沿着波传播方向的位置坐标；<br>
+&emsp;&emsp;<span class="math inline">\(t\)</span>为观测时刻；<br>
+&emsp;&emsp;<span class="math inline">\(ϕ_0\)</span>为初相位，描述单频波时可简化为 0。</p>
+
+<p><span class="figure-ref" data-target="fig-3Dwave">图1</span>，在 <span class="math inline">\((x,t,y)\)</span> 三维坐标系中绘制行波方程 <span class="math inline">\(y(x,t)= sin(πx - πt )\)</span> 的波动曲面、代表固定时刻的平面 <span class="math inline">\(t = \text{Time}\)</span>、代表固定位置的平面 x = Position、波动曲面与平面 t = Time 的交线（即时刻 Time 的空间波形 y(x, Time)）、以及波动曲面与平面 x = Position 的交线（即位置 Position 的时间历程 y(Position, t)）。通过此三维可视化，可以清晰地观察到行波的传播过程、特定时刻的空间波形分布以及特定位置点的振动历史。</p>
+
+
+        <div class="figure-container" id="fig-3Dwave">
+            <img src="img/三维坐标系下的声波图.jpg" alt="三维坐标系下的声波图">
+            <div class="figure-caption">图 1: 三维坐标系下的声波曲面示意图</div>
+        </div>
+        
+
+<p><span class="figure-ref" data-target="fig-wavegif">图2</span>为声波方程的动态示意图，竖线“|”表示空气粒子。</p>
+
+
+        <div class="figure-container" id="fig-wavegif">
+            <img src="img/声波动态示意图.gif" alt="声波动态示意图">
+            <div class="figure-caption">图 2: 声波动态示意图（非实际时间流速）</div>
+        </div>
+        
+
+<h3 class="section-title" id="subsection-1-2">1.2 频率</h3>
+
+<p>频率 <span class="math inline">\(f\)</span> 是表示声音高低的物理量，单位 <span class="math inline">\(\,\mathrm{s}^{-1}\)</span> ，记为 <span class="math inline">\(\text{Hz}\)</span>。频率小则音调低，频率大则音调高，人耳能感知的频率范围为 <span class="math inline">\(20 \sim 20\,000 \,\mathrm{Hz}\)</span>。
+声波方程用 <span class="math inline">\(f\)</span> 表示可写为</p>
+
+
+        <div class="equation-container" id="eq-2">
+            <div class="equation-content">
+                <div class="mathjax-equation">$$y(x,t) = A \sin\left(2\pi f \left(\frac{x}{v} - t\right) + \phi_0\right)$$</div>
+            </div>
+            <div class="equation-label">(2)</div>
+        </div>
+        
+
+<p>两个不同频率的声波的动态示意图如下：</p>
+
+
+        <div class="figure-container" id="fig-2wave">
+            <img src="img/两个不同声波的动态示意图.gif" alt="两个不同声波的动态示意图">
+            <div class="figure-caption">图 3: 两不同声波的动态示意图（非实际时间流速）</div>
+        </div>
+        
+
+<h3 class="section-title" id="subsection-1-3">1.3 发声物体/乐器的分类</h3>
+
+<p>一般乐器主要由三部分组成为耦合振动系统<span class="ref" data-target="ref-ma1983">[1]</span>：</p>
+
+<p>（1）振动体（管、弦、簧、膜、板），这是主要声源；<br>
+&emsp;&emsp;（2）激发体，用以激发主要声源；<br>
+&emsp;&emsp;（3）共振体，如共鸣板、空腔，发射声音。</p>
+
+<p>振动体决定基音和泛音的频率，激发体决定激发的大小和频率（主要是基音或某个分音），共振体则给乐器的音色以固有特征。
+本文主要目的之一是解释笛子的发声原理，又因弦是常见乐器，所以以下介绍弦和管的振动方程和频率方程。</p>
+
+<h3 class="section-title" id="subsection-1-4">1.4 弦和空气柱的振动模型和频率模型</h3>
+
+<p>在简化的一维模型下，弦的振动方程和空气柱的振动方程都是二阶线性齐次偏微分方程，具体推导见参考文献<span class="ref" data-target="ref-ma1983">[1]</span>。</p>
+
+<h4 class="subsubsection-title" id="subsubsection-1-4-1">1.4.1 弦的振动方程</h4>
+
+
+        <div class="equation-container" id="eq-3">
+            <div class="equation-content">
+                <div class="mathjax-equation">$$\dfrac{\partial^2 y}{\partial t^2} = c^2 \dfrac{\partial^2 y}{\partial x^2}$$</div>
+            </div>
+            <div class="equation-label">(3)</div>
+        </div>
+        
+
+<p><span class="math inline">\(y(x,t)\)</span> 是弦在位置 <span class="math inline">\(x\)</span> 和时间 <span class="math inline">\(t\)</span> 的横向位移；<span class="math inline">\(c\)</span> 是波速， <span class="math inline">\(c = \sqrt{T/\rho}\)</span>， <span class="math inline">\(T\)</span> 为张力，<span class="math inline">\(ρ\)</span>为线密度。</p>
+
+<h4 class="subsubsection-title" id="subsubsection-1-4-2">1.4.2 空气柱的振动方程</h4>
+
+
+        <div class="equation-container" id="eq-4">
+            <div class="equation-content">
+                <div class="mathjax-equation">$$\dfrac{\partial^2 \xi}{\partial t^2} = c^2 \dfrac{\partial^2 \xi}{\partial x^2}$$</div>
+            </div>
+            <div class="equation-label">(4)</div>
+        </div>
+        
+
+<p><span class="math inline">\(ξ(x, t)\)</span> 是空气柱在位置 <span class="math inline">\(x\)</span> 和时间 <span class="math inline">\(t\)</span> 的质点位移。<span class="math inline">\(c\)</span> 是声速，<span class="math inline">\(c = \sqrt{\gamma P_0 / \rho_0}\)</span>，<span class="math inline">\(γ\)</span> 为比热容比（<span class="math inline">\(\approx 1.4 \)</span>）， <span class="math inline">\(P_0\)</span> 为平衡气压，<span class="math inline">\(ρ_0\)</span> 为平衡空气密度。
+振动方程描绘了物体的运动规律，但其有无穷多解，要确定系统（弦或空气柱）能够以哪些特定的固有频率（或简正频率）自由振动，必须结合边界条件。具体推导见参考文献<span class="ref" data-target="ref-ma1983">[1]</span>，以下列出结论。</p>
+
+<h4 class="subsubsection-title" id="subsubsection-1-4-3">1.4.3 弦的频率方程</h4>
+
+<p>两端固定的弦，频率方程为</p>
+
+
+        <div class="equation-container" id="eq-5">
+            <div class="equation-content">
+                <div class="mathjax-equation">$$f_n = \frac{n}{2l} \sqrt{\frac{T}{m}}$$</div>
+            </div>
+            <div class="equation-label">(5)</div>
+        </div>
+        
+
+<p><span class="math inline">\(n\)</span> 是正整数，<span class="math inline">\(l\)</span> 是弦长，<span class="math inline">\(T\)</span> 是张力，<span class="math inline">\(m\)</span> 是单位长度的质量。
+<span class="math inline">\(f_1\)</span> 是基频，对应基音；<span class="math inline">\(f_2\)</span>、<span class="math inline">\(f_3\)</span> <span class="math inline">\(\dots\)</span> 是谐频，对应泛音。</p>
+
+<h4 class="subsubsection-title" id="subsubsection-1-4-4">1.4.4 空气柱的频率方程</h4>
+
+<p>闭管空气柱（一端封闭，一端开放），频率方程为</p>
+
+
+        <div class="equation-container" id="eq-6">
+            <div class="equation-content">
+                <div class="mathjax-equation">$$f_n = \frac{n c}{2L}$$</div>
+            </div>
+            <div class="equation-label">(6)</div>
+        </div>
+        
+
+<p><span class="math inline">\(n\)</span> 是正整数，<span class="math inline">\(c\)</span> 是声速，<span class="math inline">\(L\)</span> 是管长。</p>
+
+<p>开管空气柱（两端开放），频率方程为</p>
+
+
+        <div class="equation-container" id="eq-7">
+            <div class="equation-content">
+                <div class="mathjax-equation">$$f_n = \frac{(2n - 1)c}{4L}$$</div>
+            </div>
+            <div class="equation-label">(7)</div>
+        </div>
+        
+
+<p><span class="math inline">\(n\)</span> 是正整数，<span class="math inline">\(c\)</span> 是声速，<span class="math inline">\(L\)</span> 是管长。
+开管频率为 <span class="math inline">\(c/(2L)\)</span> 的整数倍，基频 <span class="math inline">\(n=1\)</span>，泛音为谐波；闭管频率为 <span class="math inline">\(c/(4L)\)</span> 的奇数倍，基频 <span class="math inline">\(n=1\)</span>，泛音为奇次谐波。</p>
+
+<h3 class="section-title" id="subsection-1-5">1.5 感知声音</h3>
+
+<p>人体通过感受器官来感知世界，人有五类感官（眼、耳、鼻、舌、身）产生五类感觉（视觉、听觉、嗅觉、味觉、触觉）。人体感知世界的具体机制为：感官器官细胞接受刺激产生神经信号（电信号），神经信号通过神经细胞传至大脑，大脑（通过经验）处理整合，产生感觉。</p>
+
+<p>自然界有许多数量级跨度大的数据，声音的频率也如此。人脑接受这些刺激时，会将跨越数个数量级的数据处理为区间（弱，强）的感觉。</p>
+
+<p>现有两种理论模型用于表示人脑对非线性的数据的处理，分别是韦伯-费希纳定律（Weber-Fechner Law）和史蒂文斯定律（Stevens' Power Law）。</p>
+
+<p>韦伯-费希纳定律：</p>
+
+
+        <div class="equation-container" id="eq-8">
+            <div class="equation-content">
+                <div class="mathjax-equation">$$P = k \cdot \log\left(\frac{S}{S_0}\right)$$</div>
+            </div>
+            <div class="equation-label">(8)</div>
+        </div>
+        
+
+<p><span class="math inline">\(P\)</span> 为感知强度，<span class="math inline">\(S\)</span> 为物理刺激量，<span class="math inline">\(S_0\)</span> 为感觉阈限，<span class="math inline">\(k\)</span> 为常数。</p>
+
+<p>史蒂文斯定律：</p>
+
+
+        <div class="equation-container" id="eq-9">
+            <div class="equation-content">
+                <div class="mathjax-equation">$$P = a \cdot S^n$$</div>
+            </div>
+            <div class="equation-label">(9)</div>
+        </div>
+        
+
+<p><span class="math inline">\(P\)</span> 为感知强度，<span class="math inline">\(a\)</span> 为常数，<span class="math inline">\(n\)</span> 为特定感官的指数，对于声音音高，<span class="math inline">\( n \approx 0.06 \)</span>。</p>
+
+<p>在横对数坐标轴画出史蒂文斯定律方程（<span class="figure-ref" data-target="fig-stevens">图4</span>），可描绘感知强度与频率的对应关系。</p>
+
+
+        <div class="figure-container" id="fig-stevens">
+            <img src="img/史蒂文斯定律方程.jpg" alt="史蒂文斯定律方程">
+            <div class="figure-caption">图 4: 史蒂文斯定律方程</div>
+        </div>
+        
+
+<p>由<span class="figure-ref" data-target="fig-stevens">图4</span>可知，如果声音频率的对数值是线性的（横对数坐标轴），则人对声音频率的对数值的感知是近线性的，所以人对声音频率的感知可以看作是线性的。这可以解释，钢琴上的按键从左到右逐个按下，虽然频率值不是线性递增，但其频率的对数值是线性增加的，所以感觉上音高是线性增加的。</p>
+
+<h2 class="chapter-title" id="section-2">2. 呼吸</h2>
+
+<p>人体呼吸按主导的肌肉分类有两种：胸式呼吸和腹式呼吸。</p>
+
+<p>胸式呼吸： 以肋间外肌为主要动力源，收缩时提升肋骨，扩大胸腔横向直径。胸式呼吸浅而短促，通气量较小。</p>
+
+<p>腹式呼吸： 以膈肌（横膈膜） 为主要动力源，收缩时下移压迫腹腔脏器，使腹部向前隆起，肺充分扩张。腹式呼吸深而缓慢，通气量大。</p>
+
+<p>传统上所说“气沉丹田”指的便是腹式呼吸。</p>
+
+<p>胸式呼吸常应用于运动，腹式呼吸常应用于睡眠、演唱及管乐器演奏。</p>
+
+
+        <div class="figure-container" id="fig-breath">
+            <img src="img/胸式呼吸和腹式呼吸的动态示意图.gif" alt="胸式呼吸和腹式呼吸的动态示意图">
+            <div class="figure-caption">图 5: 胸式呼吸和腹式呼吸的动态示意图（非实际呼吸速度）</div>
+        </div>
+        
+
+<h2 class="chapter-title" id="section-3">3. 基础乐理</h2>
+
+<p>音乐理论，以下按名词简要列出
+音、音的关系
+我们已经知道，人对声音频率的对数值的感知是线性的。
+乐律
+记谱
+五线谱
+简谱</p>
+
+<h2 class="chapter-title" id="section-4">4. 笛子历史</h2>
+
+<h2 class="chapter-title" id="section-5">5. 笛子发声原理详解</h2>
+      
+        <div id="bibliography">
+  <div class="bibliography-title">参考文献</div>
+  <div class="bibliography-item" id="ref-ma1983">
+    [1] 马大猷, 沈㠙. 声学手册[M]. 科学出版社, 1983: 624-628.
+  </div>
+  <div class="bibliography-item" id="ref-mcardle2020">
+    [2] McArdle, S., et al. (2020). Quantum computational chemistry. Reviews of Modern Physics, 92(1), 015003.
+  </div>
+  <div class="bibliography-item" id="ref-cao2019">
+    [3] Cao, Y., et al. (2019). Quantum chemistry in the age of quantum computing. Chemical Reviews, 119(19), 10856-10915.
+  </div>
+</div>
+        
+        
+        <div class="footer">
+            <p>Python | DeepSeek-R1 | MarkDown | HTML | Github Pages</p>
+        </div>
+    </div>
+
+    <script>
+        // 文档加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 设置引用点击事件
+            document.querySelectorAll('.ref, .figure-ref, .table-ref, .equation-ref').forEach(ref => {
+                ref.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                        
+                        // 添加高亮效果
+                        targetElement.style.backgroundColor = 'rgba(52, 152, 219, 0.2)';
+                        setTimeout(() => {
+                            targetElement.style.backgroundColor = '';
+                        }, 2000);
+                    }
+                });
+            });
+            
+            // 主题切换功能
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIconPath');
+            const body = document.body;
+            
+            // 主题状态管理
+            let isDarkMode = false;
+            
+            // 初始化主题
+            function initTheme() {
+                // 检查本地存储的主题偏好
+                const savedTheme = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                
+                // 应用初始主题
+                if (savedTheme === 'dark') {
+                    body.classList.add('dark-mode');
+                    isDarkMode = true;
+                } else if (savedTheme === 'light') {
+                    body.classList.remove('dark-mode');
+                    isDarkMode = false;
+                } else {
+                    // 如果没有保存的设置，使用系统偏好
+                    if (prefersDark) {
+                        body.classList.add('dark-mode');
+                        isDarkMode = true;
+                    } else {
+                        body.classList.remove('dark-mode');
+                        isDarkMode = false;
+                    }
+                }
+                
+                // 更新图标
+                updateThemeIcon();
+            }
+            
+            // 主题切换按钮事件
+            themeToggle.addEventListener('click', () => {
+                isDarkMode = !isDarkMode;
+                if (isDarkMode) {
+                    body.classList.add('dark-mode');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    body.classList.remove('dark-mode');
+                    localStorage.setItem('theme', 'light');
+                }
+                updateThemeIcon();
+            });
+            
+            // 更新主题图标
+            function updateThemeIcon() {
+                if (isDarkMode) {
+                    // 切换到亮色模式图标（太阳）
+                    themeIcon.setAttribute('d', 'M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36c-0.98,1.37-2.58,2.26-4.4,2.26 c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z');
+                } else {
+                    // 切换到暗色模式图标（月亮）
+                    themeIcon.setAttribute('d', 'M12,22 C17.5228475,22 22,17.5228475 22,12 C22,6.4771525 17.5228475,2 12,2 C6.4771525,2 2,6.4771525 2,12 C2,17.5228475 6.4771525,22 12,22 Z M12,20.5 L12,3.5 C16.6944204,3.5 20.5,7.30557963 20.5,12 C20.5,16.6944204 16.6944204,20.5 12,20.5 Z');
+                }
+            }
+            
+            // 系统主题变化监听
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                // 只在没有用户设置的情况下响应系统变化
+                if (!localStorage.getItem('theme')) {
+                    isDarkMode = e.matches;
+                    if (e.matches) {
+                        body.classList.add('dark-mode');
+                    } else {
+                        body.classList.remove('dark-mode');
+                    }
+                    updateThemeIcon();
+                }
+            });
+            
+            // 初始化主题
+            initTheme();
+        });
+    </script>
+</body>
+</html>
