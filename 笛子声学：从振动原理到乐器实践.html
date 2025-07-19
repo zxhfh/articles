@@ -93,17 +93,16 @@ body {
   .subsubsection-title {
     font-size: 1.2rem;
   }
+
+  .figure-container img {
+    max-width: 100%;/* 图片宽度？无变化？ */
+  }
   
   /* 移动端表格优化 */
   .academic-table {
     display: block;
     overflow-x: auto;
     white-space: nowrap;
-  }
-  
-  /* 移动端公式优化 */
-  .equation-container {
-    flex-direction: column;
   }
   
   .equation-label {
@@ -328,7 +327,7 @@ p {
 }
 
 .figure-container img {
-  max-width: 100%;
+  max-width: 50%;/* 图片宽度 */
   border: 1px solid var(--border-color);
   border-radius: 4px;
   box-shadow: 0 2px 4px var(--shadow-color);
@@ -378,7 +377,7 @@ p {
 /* 调整公式编号位置 */
 .equation-label {
   position: static; /* 从绝对定位改为静态定位 */
-  margin-left: 10px; /* 在公式右侧添加间距 */
+  margin-left: 20px; /* 在公式右侧添加间距 */
   font-style: normal;
   color: var(--secondary-color);
   font-weight: bold;
@@ -465,14 +464,6 @@ caption {
   cursor: pointer;
   padding: 0 2px;
   transition: color 0.3s;
-  text-decoration: underline;
-  text-decoration-color: rgba(52, 152, 219, 0.3);
-  text-underline-offset: 3px;
-}
-
-.figure-ref:hover, .table-ref:hover, .equation-ref:hover {
-    color: var(--primary-color);
-    text-decoration-color: var(--secondary-color);
 }
 
 #bibliography {
@@ -536,6 +527,23 @@ caption {
   fill: currentColor;
 }
 
+/* 添加引用样式 */
+.figure-ref, .table-ref, .equation-ref {
+    font-weight: bold;
+    color: var(--secondary-color);
+    cursor: pointer;
+    padding: 0 2px;
+    transition: color 0.3s;
+    text-decoration: underline;
+    text-decoration-color: rgba(52, 152, 219, 0.3);
+    text-underline-offset: 3px;
+}
+
+.figure-ref:hover, .table-ref:hover, .equation-ref:hover {
+    color: var(--primary-color);
+    text-decoration-color: var(--secondary-color);
+}
+
 /* 图片预览模态框样式 */
 #imageModal {
   display: none;
@@ -587,7 +595,6 @@ caption {
   padding: 10px;
   background: rgba(0, 0, 0, 0.6);
 }
-
     </style>
 </head>
 <body>
